@@ -1,0 +1,19 @@
+# Imaging data and derived outputs are NOT tracked (code-only repository)
+*.czi
+*.tif
+*.tiff
+*.ome.tif
+*.jpg
+*.jpeg
+*.parquet
+*.xlsx
+_nox1_normalization/
+sample_*/
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+env/
+.DS_Store
