@@ -28,8 +28,8 @@ conda env create -f environment.yml && conda activate hdcycif
 # or:  pip install -r requirements.txt   (Python 3.10)
 ```
 
-Exact pinned versions (BaSiCPy 1.2.0 / JAX 0.4.23, scikit-image, scikit-learn, SciPy, tifffile,
-NumPy, pandas, Matplotlib, Pillow, openpyxl) are in `requirements.txt`. The pipeline is CPU-only.
+Exact pinned versions (BaSiCPy 1.2.0 / JAX 0.4.23, scikit-image, SciPy, tifffile, NumPy, pandas,
+Matplotlib, Pillow, openpyxl) are in `requirements.txt`. The pipeline is CPU-only.
 
 ## Running
 
@@ -49,6 +49,11 @@ python pipeline/6_scene_figures.py
 Optional environment variables: `HD_SAMPLES` (comma-separated subset of samples), `HD_FIG_DS`/
 `HD_FIG_DPI`/`HD_FIG_IN`/`HD_FIG_JPGQ` (figure resolution/quality), `HD_MAKE_PDF=1` (also assemble
 the scene JPGs into one PDF). Outputs are written under `<HD_DATA_ROOT>` as listed above.
+
+For the group labels (e.g. MUT/WT) on the scene figures, `pipeline/6` optionally reads
+`<HD_DATA_ROOT>/sample_groups.csv` (columns `patient,group`; see `sample_groups.example.csv` for the
+format). This mapping is study metadata and is **not** part of the repository; if the file is absent
+the figures are simply labelled without a group.
 
 ### Inputs
 Step 1 reads the raw exported single tiles (`<sample>/cyc001/Z-Stacks/fileseries_export/z01/tiles/`)

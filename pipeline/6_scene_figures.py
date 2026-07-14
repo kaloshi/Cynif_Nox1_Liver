@@ -26,8 +26,18 @@ import sys as _sys, pathlib as _pathlib
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent.parent))
 from hdcycif import config as C
 
-GROUP = {"LXT40": "MUT", "LXT47": "MUT", "LXT52": "MUT",
-         "LXT31": "WT", "LXT32": "WT", "LXT38": "WT", "LXT41": "WT", "LXT48": "WT"}
+def load_groups():
+    """patient -> group label, read from <HD_DATA_ROOT>/sample_groups.csv (columns: patient,group).
+    This mapping is study metadata and is NOT shipped with the repository; see the template
+    sample_groups.example.csv for the format. Returns {} (no group labels) if the file is absent."""
+    f = C.DATA_ROOT / "sample_groups.csv"
+    if f.exists():
+        g = pd.read_csv(f)
+        return {str(p): str(v) for p, v in zip(g["patient"], g["group"])}
+    return {}
+
+
+GROUP = load_groups()
 DS = int(os.environ.get("HD_FIG_DS", "2"))
 DPI = int(os.environ.get("HD_FIG_DPI", "250"))
 FIGIN = float(os.environ.get("HD_FIG_IN", "30"))   # figure side in inches (panel px ~= FIGIN*DPI/2)
@@ -64,7 +74,7 @@ def hepatocyte_mask(sample, hep_ids):
 
 
 def make_fig(s, hep_ids):
-    grp = GROUP.get(C.patient_of(s), "?")
+    grp = GROUP.get(C.patient_of(s), "")
     st = tiff.imread(str(C.DATA_ROOT / s / CLEAN6))
     dN = norm(dsmean(st[C.CH["DAPI"]]))
     aN = norm(dsmean(st[C.CH["ASGR1"]]))
@@ -85,7 +95,8 @@ def make_fig(s, hep_ids):
     ax[1, 1].imshow(aN, cmap="viridis", interpolation="nearest"); ax[1, 1].set_title("ASGR1 (hepatocyte marker)", fontsize=22)
     for a in ax.ravel():
         a.axis("off")
-    fig.suptitle(f"{s.replace('sample_','')}  ({grp})", fontsize=30, fontweight="bold")
+    title = s.replace("sample_", "") + (f"  ({grp})" if grp else "")
+    fig.suptitle(title, fontsize=30, fontweight="bold")
     fig.tight_layout(rect=[0, 0, 1, 0.975])
     return fig
 
@@ -101,7 +112,7 @@ def main():
         fig.savefig(str(jpg), dpi=DPI, pil_kwargs={"quality": JPG_Q})
         plt.close(fig)
         jpgs.append(jpg)
-        print(f"  {s} ({GROUP.get(C.patient_of(s),'?')}) -> {jpg.name} ({jpg.stat().st_size/1e6:.1f} MB)", flush=True)
+        print(f"  {s} ({GROUP.get(C.patient_of(s),'-')}) -> {jpg.name} ({jpg.stat().st_size/1e6:.1f} MB)", flush=True)
     if os.environ.get("HD_MAKE_PDF", "0") == "1" and len(jpgs) > 1:
         ims = [Image.open(str(p)).convert("RGB") for p in jpgs]
         out_pdf = C.OUT_ROOT / "NOX1_scene_figures.pdf"
