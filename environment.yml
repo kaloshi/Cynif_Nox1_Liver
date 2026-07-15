@@ -1,18 +1,29 @@
-name: hdcycif
+# HD CyCIF NOX1 analysis pipeline (v5).
+# Two environments are used — see README.md. This file describes the main segmentation/
+# typing/analysis environment; a CUDA-enabled PyTorch build and the companion `cynif`
+# package are installed separately (not pinnable here).
+
+name: cynif
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.11
   - pip
   - pip:
-      - BaSiCPy==1.2.0
-      - jax==0.4.23
-      - jaxlib==0.4.23
-      - numpy==1.26.4
-      - scipy==1.12.0
-      - pandas==2.3.0
-      - scikit-image==0.25.2
-      - tifffile==2023.2.28
-      - matplotlib==3.10.3
-      - pillow==11.2.1
-      - openpyxl==3.1.5
+      - cellpose==4.1.1        # Cellpose-SAM
+      # torch==2.12.0 with CUDA — install from the PyTorch CUDA index, e.g.:
+      #   pip install torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130
+      - scikit-image==0.26.0
+      - scikit-learn==1.9.0
+      - scipy==1.17.1
+      - numpy==2.4.6
+      - pandas==2.3.3
+      - matplotlib==3.10.9
+      - tifffile==2026.3.3
+      - openpyxl>=3.1
+
+# ---------------------------------------------------------------------------
+# De-seaming environment (pipeline/1_deseam_refuse.py), created separately:
+#   name: cynif-illum   python=3.11
+#   pip: BaSiCPy==2.0.0  jax==0.10.1  numpy  scipy  scikit-image  tifffile  matplotlib
+# ---------------------------------------------------------------------------

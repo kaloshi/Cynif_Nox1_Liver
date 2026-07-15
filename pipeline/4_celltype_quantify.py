@@ -4,7 +4,7 @@ data-driven hepatocyte gate.
 Cell typing: CD45+ = membrane-ring median CD45 > Otsu. Hepatocyte = ASGR1+ & CD45-. ASGR1 is a
 graded marker (no clean bimodal split), so the ASGR1+ threshold per sample is the 95th percentile of
 ASGR1 in the CD45+ (ASGR1-negative) population, clamped to the [5th, 15th] percentile of that
-sample's ASGR1 distribution to keep it stable (-> ~75% hepatocytes).
+sample's ASGR1 distribution to keep it stable.
 
 NOX1 is cross-sample-normalized analytically with the ECM offset from pipeline/2 (additive; exact for
 the per-cell mean). Reported readout: the per-sample / per-patient median hepatocyte NOX1.
@@ -23,8 +23,8 @@ from hdcycif import config as C
 CELLSTATS = "segmentation_v4/cell_stats_v4.csv"
 CD45_NEG_PCTILE = 95
 # ASGR1+ threshold = p95 of ASGR1 in CD45+ cells, clamped to [lo, hi] percentiles of the sample's
-# ASGR1 distribution. [5, 15] = inclusive (most ASGR1+ tissue counts as hepatocyte, ~75%); raise
-# for stricter (e.g. [10, 25] -> ~70%, [25, 50] -> ~56%).
+# ASGR1 distribution. [5, 15] = inclusive (most ASGR1+ tissue counts as hepatocyte); raise
+# for a stricter gate (e.g. [10, 25] or [25, 50]).
 CLAMP_PCT = (5, 15)
 NOX1_COLS = ["NOX1_mean", "NOX1_mem_mean", "NOX1_mem_median"]
 
