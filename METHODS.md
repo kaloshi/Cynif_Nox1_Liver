@@ -5,7 +5,7 @@ regions), forming a mutant (MUT: LXT40, LXT47, LXT52) and a wild-type (WT: LXT31
 LXT41, LXT48) group. Single-cycle six-plex cyclic immunofluorescence (CyCIF)¹ acquired, in order,
 DAPI, AF1 (Atto490LS), an autofluorescence channel (AF2), ASGR1 (ATTO532), CD45 (SO) and NOX1
 (ATTO643) at 0.26 µm per pixel, as a 5 × 5 grid of 2,048-pixel tiles with ~10 % overlap and three
-z-planes; the middle focal plane was used. Raw tile export, per-channel deconvolution,
+z-planes spaced 2 µm apart; the middle focal plane was used. Raw tile export, per-channel deconvolution,
 extended-depth-of-field projection and stitching were performed with an in-house pipeline.
 
 Because the original per-tile flat-field correction had been fitted per sample without a dark-field
